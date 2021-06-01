@@ -72,4 +72,19 @@ public class TodoController {
         return SUCCESS;
     }
 
+    @GetMapping("/todos/{id}")
+    public Todo fbi(@PathVariable("id") Long id) {
+        System.out.println("-----");
+        System.out.println(id);
+        return todoRepository.findById(id).stream().findFirst().orElseThrow();
+    }
+
+    @PutMapping("/todos/{id}/toggle_status")
+    public String toggleStatusById(@PathVariable("id") Long id) {
+        Todo todo = todoRepository.findById(id).orElseThrow();
+        todo.setStatus(todo.getStatus().equals(Status.COMPLETE) ? Status.ACTIVE : Status.COMPLETE);
+        todoRepository.saveAndFlush(todo);
+
+        return SUCCESS;
+    }
 }
