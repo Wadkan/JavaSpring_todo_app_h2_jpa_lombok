@@ -36,6 +36,9 @@ public class TodoController {
         return todoList;
     }
 
-
+    @DeleteMapping("/todos/completed")
+    public String removeCompleted() {
+        return SUCCESS;
+    }
 
 }

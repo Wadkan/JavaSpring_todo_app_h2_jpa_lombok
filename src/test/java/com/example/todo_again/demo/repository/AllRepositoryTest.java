@@ -53,4 +53,32 @@ public class AllRepositoryTest {
         todoRepository.save(todo);
     }
 
+    @Test
+    public void deleteTodoByStatus() {
+        Todo todo = Todo.builder()
+                .status(Status.ACTIVE)
+                .title("First todo")
+                .build();
+        todoRepository.save(todo);
+
+        assertEquals(todoRepository.findAll().size(), 1);
+
+        todoRepository.deleteTodoByStatus(Status.ACTIVE);
+        assertEquals(todoRepository.findAll().size(), 0);
+    }
+
+    @Test
+    public void deleteAllByStatus() {
+        Todo todo = Todo.builder()
+                .status(Status.ACTIVE)
+                .title("First todo")
+                .build();
+        todoRepository.save(todo);
+
+        assertEquals(todoRepository.findAll().size(), 1);
+
+        todoRepository.deleteAllByStatus(Status.ACTIVE);
+        assertEquals(todoRepository.findAll().size(), 0);
+    }
+
 }
