@@ -22,7 +22,6 @@ public class TodoController {
 
     private static final String SUCCESS = "{\"success\":true}";
 
-
     @PostMapping("/init")
     public List<Todo> init() {
         initialTodoCreator.createInitialTodos();
