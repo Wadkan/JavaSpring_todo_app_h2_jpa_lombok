@@ -41,4 +41,10 @@ public class TodoController {
         return SUCCESS;
     }
 
+    @PutMapping("/todos/toggle_all")
+    public String toggleAllStatus(@RequestParam("toggle-all") Boolean complete) {
+        todoRepository.updateAllStatus(complete ? Status.COMPLETE : Status.ACTIVE);
+        return SUCCESS;
+    }
+
 }

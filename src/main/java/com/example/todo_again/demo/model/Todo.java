@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -26,6 +23,8 @@ public class Todo {
     @Column(nullable = false, unique = true)
     private String title;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
+
     private static int _idCounter = 0;
 }
