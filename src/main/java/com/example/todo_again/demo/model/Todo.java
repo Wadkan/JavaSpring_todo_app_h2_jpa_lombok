@@ -27,4 +27,13 @@ public class Todo {
     private Status status;
 
     private static int _idCounter = 0;
+
+    @Transient
+    private Boolean completed;
+
+    public void checkIfCompleted() {
+        if (status != null) {
+            completed = status.equals(Status.COMPLETE);
+        }
+    }
 }

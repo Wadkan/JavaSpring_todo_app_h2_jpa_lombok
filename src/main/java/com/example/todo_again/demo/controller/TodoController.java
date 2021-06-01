@@ -43,6 +43,12 @@ public class TodoController {
         List<Todo> todoList = todoRepository.findAll()
                 .stream().filter(todo -> todo.getStatus().equals(status))
                 .collect(Collectors.toList());
+
+        // set completed field
+        for (Todo todo : todoList){
+            todo.checkIfCompleted();
+        }
+
         return todoList;
     }
 
