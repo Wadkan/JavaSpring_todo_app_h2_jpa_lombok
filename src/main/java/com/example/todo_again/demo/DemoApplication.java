@@ -8,6 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.context.annotation.Profile;
 
+import javax.annotation.PostConstruct;
+
 @SpringBootApplication
 public class DemoApplication {
 
@@ -16,6 +18,11 @@ public class DemoApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
+    }
+
+    @PostConstruct
+    public void afterInit() {
+
     }
 
 }

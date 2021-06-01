@@ -88,34 +88,4 @@ public class AllRepositoryTest {
         assertEquals(todoRepository.findAll().size(), 0);
     }
 
-    @Test
-    public void updateAllStatus() {
-        Todo todo = Todo.builder()
-                .status(Status.ACTIVE)
-                .title("First todo")
-                .build();
-
-        Todo todo2 = Todo.builder()
-                .status(Status.COMPLETE)
-                .title("Second todo")
-                .build();
-        todoRepository.saveAll(Lists.newArrayList(todo, todo2));
-
-        Boolean complete;
-
-        complete = true;
-        todoRepository.updateAllStatus(Status.COMPLETE);
-        System.out.println("--------");
-        System.out.println(todoRepository.findAll());
-        System.out.println("--------");
-        assertTrue(todoRepository.findAll().stream().allMatch(todo1 -> todo1.getStatus().equals(Status.COMPLETE)));
-
-        entityManager.clear();
-        todoRepository.saveAll(Lists.newArrayList(todo, todo2));
-
-        complete = false;
-        todoRepository.updateAllStatus(complete ? Status.COMPLETE : Status.ACTIVE);
-        assertTrue(todoRepository.findAll().stream().allMatch(todo1 -> todo1.getStatus().equals(Status.ACTIVE)));
-    }
-
 }

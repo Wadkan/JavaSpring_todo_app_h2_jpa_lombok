@@ -3,6 +3,7 @@ package com.example.todo_again.demo.controller;
 import com.example.todo_again.demo.model.Status;
 import com.example.todo_again.demo.model.Todo;
 import com.example.todo_again.demo.repository.TodoRepository;
+import com.example.todo_again.demo.service.InitialTodoCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,17 @@ public class TodoController {
     @Autowired
     TodoRepository todoRepository;
 
+    @Autowired
+    InitialTodoCreator initialTodoCreator;
+
     private static final String SUCCESS = "{\"success\":true}";
+
+
+    @PostMapping("/init")
+    public List<Todo> init() {
+        initialTodoCreator.createInitialTodos();
+        return todoRepository.findAll();
+    }
 
     @PostMapping("/addTodo")
     public Todo addTodo(@RequestBody @Valid Todo todo) {
@@ -41,9 +52,23 @@ public class TodoController {
         return SUCCESS;
     }
 
-    @PutMapping("/todos/toggle_all")
-    public String toggleAllStatus(@RequestParam("toggle-all") Boolean complete) {
-        todoRepository.updateAllStatus(complete ? Status.COMPLETE : Status.ACTIVE);
+    @PutMapping("/todos/toggle-all")
+    public String toggleAllStatus(@RequestParam("complete") Boolean complete) {
+        Status newStatus = complete ? Status.COMPLETE : Status.ACTIVE;
+
+        List<Todo> todoList = todoRepository.findAll();
+
+        for (Todo todo : todoList) {
+            todo.setStatus(newStatus);
+        }
+        return SUCCESS;
+    }
+
+    @PutMapping("/todos/{id}")
+    public String updateById(@PathVariable("id") Long id, @RequestParam("title") String title) {
+        Todo todo = todoRepository.findById(id).stream().findFirst().orElseThrow();
+        todo.setTitle(title);
+        todoRepository.saveAndFlush(todo);
         return SUCCESS;
     }
 

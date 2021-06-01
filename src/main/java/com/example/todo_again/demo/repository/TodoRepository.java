@@ -12,8 +12,4 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
     void deleteTodoByStatus(Status status);
 
     void deleteAllByStatus(Status status);
-
-    @Modifying
-    @Query("UPDATE Todo t SET t.status = ?1")
-    void updateAllStatus(Status status);
 }
