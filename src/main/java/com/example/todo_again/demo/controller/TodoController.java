@@ -7,7 +7,7 @@ import com.example.todo_again.demo.service.InitialTodoCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,8 +57,10 @@ public class TodoController {
         return todoList;
     }
 
+    @Transactional
     @DeleteMapping("/todos/completed")
     public String removeCompleted() {
+        todoRepository.deleteTodoByStatus(Status.COMPLETE);
         return SUCCESS;
     }
 
