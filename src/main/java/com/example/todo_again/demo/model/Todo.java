@@ -31,7 +31,7 @@ public class Todo {
     @Transient
     private Boolean completed;
 
-    public void checkIfCompleted() {
+    public void fillCompletedField() {
         if (status != null) {
             completed = status.equals(Status.COMPLETE);
         }
