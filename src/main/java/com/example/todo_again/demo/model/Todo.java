@@ -36,4 +36,12 @@ public class Todo {
             completed = status.equals(Status.COMPLETE);
         }
     }
+
+//    public Boolean isCompleted() {
+//        if (status.equals(Status.COMPLETE)) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 }

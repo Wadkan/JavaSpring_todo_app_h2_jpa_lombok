@@ -64,15 +64,16 @@ public class TodoController {
         return SUCCESS;
     }
 
-    @PutMapping("/todos/toggle-all")
-    public String toggleAllStatus(@RequestParam("complete") Boolean complete) {
-        Status newStatus = complete ? Status.COMPLETE : Status.ACTIVE;
+    @PutMapping("/todos/toggle_all")
+    public String toggleAllStatus(@RequestParam("toggle-all") String complete) {
+        Status newStatus = (complete.equals("true")) ? Status.COMPLETE : Status.ACTIVE;
+        System.out.println(newStatus);
 
         List<Todo> todoList = todoRepository.findAll();
-
         for (Todo todo : todoList) {
             todo.setStatus(newStatus);
         }
+        todoRepository.saveAllAndFlush(todoList);
         return SUCCESS;
     }
 
@@ -86,8 +87,6 @@ public class TodoController {
 
     @GetMapping("/todos/{id}")
     public Todo fbi(@PathVariable("id") Long id) {
-        System.out.println("-----");
-        System.out.println(id);
         return todoRepository.findById(id).stream().findFirst().orElseThrow();
     }
 
