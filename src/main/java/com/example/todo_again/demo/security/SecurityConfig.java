@@ -37,22 +37,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .httpBasic().disable() // By default Spring Security uses HTTP Basic authentication, we disable this filter.
-            .csrf().disable() // Disable CSRF. Leaving it enabled would ignore GET, HEAD, TRACE, OPTIONS
-            // Disable Tomcat's session management. This causes HttpSession to be null and no session cookie to be created
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
+                .httpBasic().disable() // By default Spring Security uses HTTP Basic authentication, we disable this filter.
+                .csrf().disable() // Disable CSRF. Leaving it enabled would ignore GET, HEAD, TRACE, OPTIONS
+                // Disable Tomcat's session management. This causes HttpSession to be null and no session cookie to be created
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests() // restrict access based on the config below:
                 .antMatchers("/auth/signin").permitAll() // allowed by anyone
-                .antMatchers(HttpMethod.GET, "/vehicles/**").authenticated() // allowed only when signed in
-                .antMatchers(HttpMethod.DELETE, "/vehicles/**").hasRole("ADMIN") // allowed if signed in with ADMIN role
-                .antMatchers(HttpMethod.POST, "/vehicles/**").hasRole("ADMIN") // allowed if signed in with ADMIN role
-                .antMatchers(HttpMethod.PUT, "/vehicles/**").hasRole("ADMIN") // allowed if signed in with ADMIN role
-                .antMatchers(HttpMethod.GET, "/me").authenticated() // allowed only if signed in
+
+                .antMatchers("/list").authenticated() // allowed only when signed in
+                .antMatchers(HttpMethod.POST, "/addTodo").authenticated() // allowed if signed in with ADMIN role
+                .antMatchers(HttpMethod.PUT, "/todos/**").authenticated() // allowed if signed in with ADMIN role
+
+                .antMatchers(HttpMethod.POST, "/init").authenticated() // allowed only when signed in
+
                 .anyRequest().denyAll() // anything else is denied; this is a safeguard in case we left something out.
-            .and()
-            // Here we define our custom filter that uses the JWT tokens for authentication.
-            .addFilterBefore(new JwtTokenFilter(jwtTokenServices), UsernamePasswordAuthenticationFilter.class);
+                .and()
+                // Here we define our custom filter that uses the JWT tokens for authentication.
+                .addFilterBefore(new JwtTokenFilter(jwtTokenServices), UsernamePasswordAuthenticationFilter.class);
     }
 }
 
