@@ -42,12 +42,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // Disable Tomcat's session management. This causes HttpSession to be null and no session cookie to be created
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+
+                .formLogin()
+                .loginPage("/login.html")
+                .loginProcessingUrl("/auth/signin")
+                .defaultSuccessUrl("/index.html", true)
+                .failureUrl("/login.html?error=true")
+                .and()
+                
                 .authorizeRequests() // restrict access based on the config below:
+                .antMatchers("/login").permitAll() // allowed by anyone
                 .antMatchers("/auth/signin").permitAll() // allowed by anyone
+                .antMatchers("/**").permitAll() // allowed by anyone
 
                 .antMatchers("/list").authenticated() // allowed only when signed in
                 .antMatchers(HttpMethod.POST, "/addTodo").authenticated() // allowed if signed in with ADMIN role
-                .antMatchers(HttpMethod.PUT, "/todos/**").authenticated() // allowed if signed in with ADMIN role
+                .antMatchers(HttpMethod.DELETE, "/todos/completed").authenticated() // allowed if signed in with ADMIN role
+                .antMatchers(HttpMethod.PUT, "/todos/toggle_all").authenticated() // allowed if signed in with ADMIN role
+                .antMatchers(HttpMethod.PUT, "/todos/*").authenticated() // allowed if signed in with ADMIN role
+                .antMatchers(HttpMethod.GET, "/todos/*").authenticated() // allowed if signed in with ADMIN role
+                .antMatchers(HttpMethod.PUT, "/todos/*/toggle_status").authenticated() // allowed if signed in with ADMIN role
 
                 .antMatchers(HttpMethod.POST, "/init").authenticated() // allowed only when signed in
 
